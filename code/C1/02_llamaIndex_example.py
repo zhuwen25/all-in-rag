@@ -1,4 +1,8 @@
 import os
+import warnings
+# Suppress Pydantic validation warning from dependencies
+warnings.filterwarnings('ignore', message=".*validate_default.*")
+
 # os.environ['HF_ENDPOINT']='https://hf-mirror.com'
 from dotenv import load_dotenv
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings 
@@ -7,9 +11,10 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 load_dotenv()
 
+print(f"model name is: {os.getenv('ModelName')}")
 # 使用 AIHubmix
 Settings.llm = OpenAILike(
-    model="glm-4.7-flash-free",
+    model=os.getenv("ModelName"),
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     api_base="https://aihubmix.com/v1",
     is_chat_model=True
